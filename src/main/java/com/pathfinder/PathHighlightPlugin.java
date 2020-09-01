@@ -3,51 +3,41 @@ package com.pathfinder;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Example"
+		name = "Pathfinder",
+		description = "Highlight the path your character will take to the hovered tile",
+		tags = {"highlight", "overlay", "path", "tile", "tiles", "gauntlet", "zalcano"},
+		enabledByDefault = false
 )
-public class ExamplePlugin extends Plugin
+public class PathHighlightPlugin extends Plugin
 {
 	@Inject
-	private Client client;
+	private OverlayManager overlayManager;
 
 	@Inject
-	private ExampleConfig config;
+	private PathHighlightOverlay overlay;
+
+	@Provides
+	PathHighlightConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(PathHighlightConfig.class);
+	}
 
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.info("Example started!");
+		overlayManager.add(overlay);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		log.info("Example stopped!");
-	}
-
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
-		}
-	}
-
-	@Provides
-	ExampleConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(ExampleConfig.class);
+		overlayManager.remove(overlay);
 	}
 }
