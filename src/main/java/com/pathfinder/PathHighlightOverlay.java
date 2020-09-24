@@ -13,12 +13,14 @@ import java.awt.*;
 public class PathHighlightOverlay extends Overlay {
     private final Client client;
     private final PathHighlightConfig config;
+    private final PathHighlightPlugin plugin;
 
     @Inject
-    private PathHighlightOverlay(Client client, PathHighlightConfig config)
+    private PathHighlightOverlay(Client client, PathHighlightConfig config, PathHighlightPlugin plugin)
     {
         this.client = client;
         this.config = config;
+        this.plugin = plugin;
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
         setPriority(OverlayPriority.MED);
@@ -26,6 +28,9 @@ public class PathHighlightOverlay extends Overlay {
 
     @Override
     public Dimension render(Graphics2D graphics) {
+        if (!this.plugin.isDisplay()) {
+            return null;
+        }
         WorldPoint currPoint = client.getLocalPlayer().getWorldLocation();
         Tile selectedTile = client.getSelectedSceneTile();
         if (selectedTile != null && currPoint != null)
