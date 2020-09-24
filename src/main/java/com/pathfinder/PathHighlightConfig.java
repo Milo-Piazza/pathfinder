@@ -30,5 +30,5 @@ public interface PathHighlightConfig extends Config
 			name = "Keybind",
 			description = "Sets the keybind if configured to display the path on toggle or while a key is pressed.\nCan be combined with Shift, Ctrl and Alt as well as Command on Mac."
 	)
-	default Keybind displayKeybind() { return new Keybind(KeyEvent.VK_P, 0); }
+	default Keybind displayKeybind() { return new Keybind(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK); }
 }

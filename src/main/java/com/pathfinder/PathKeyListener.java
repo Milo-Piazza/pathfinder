@@ -15,17 +15,19 @@ public class PathKeyListener implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        Keybind keybind = config.displayKeybind();
-        if (keybind.matches(e) && config.displaySetting() == PathDisplaySetting.TOGGLE_ON_KEY_PRESSED) {
-            plugin.setDisplay(!plugin.isDisplay());
-        }
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        //TODO: Add integration with Key Rebinding plugin
         Keybind keybind = config.displayKeybind();
-        if (keybind.matches(e) && config.displaySetting() == PathDisplaySetting.DISPLAY_WHILE_KEY_PRESSED) {
-            plugin.setDisplay(true);
+        if (keybind.matches(e)) {
+            if (config.displaySetting() == PathDisplaySetting.DISPLAY_WHILE_KEY_PRESSED) {
+                plugin.setDisplay(true);
+            } else if (config.displaySetting() == PathDisplaySetting.TOGGLE_ON_KEY_PRESSED) {
+                plugin.setDisplay(!plugin.isDisplay());
+            }
         }
     }
 
