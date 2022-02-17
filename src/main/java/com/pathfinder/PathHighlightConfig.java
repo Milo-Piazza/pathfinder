@@ -22,6 +22,13 @@ public interface PathHighlightConfig extends Config
 	}
 
 	@ConfigItem(
+			keyName = "onlyTouchedTiles",
+			name = "Hide Tiles Jumped Over",
+			description = "Hides tiles you would jump over when you run"
+	)
+	default boolean onlyTouchedTiles() { return false; }
+
+	@ConfigItem(
 			keyName = "displaySetting",
 			name = "Display Setting",
 			description = "Configures when the path should be displayed"
