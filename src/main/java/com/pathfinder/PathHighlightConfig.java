@@ -26,7 +26,7 @@ public interface PathHighlightConfig extends Config
 			name = "Hide Tiles Jumped Over",
 			description = "Hides tiles you would jump over when you run"
 	)
-	default boolean skipJumpedTiles() { return false; }
+	default boolean skipJumpedTiles() { return true; }
 
 	@ConfigItem(
 			keyName = "displaySetting",

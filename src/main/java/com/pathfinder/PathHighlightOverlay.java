@@ -6,11 +6,14 @@ import net.runelite.api.Tile;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.plugins.itemstats.stats.Stats;
 import net.runelite.client.ui.overlay.*;
 import net.runelite.api.widgets.WidgetInfo;
 
 import javax.inject.Inject;
 import java.awt.*;
+
+import static net.runelite.client.plugins.itemstats.Builders.heal;
 
 public class PathHighlightOverlay extends Overlay {
     private final Client client;
@@ -52,13 +55,8 @@ public class PathHighlightOverlay extends Overlay {
                 dy = (int) Math.signum((float) yDist);
             }
 
-            boolean isRunning;
-            Widget runOrb = client.getWidget(WidgetInfo.MINIMAP_TOGGLE_RUN_ORB);
-
-            if (runOrb == null)
-                isRunning = true;
-            else
-                isRunning = runOrb.isFilled();
+            // TODO figure out how to detect if the player is actually running
+            boolean isRunning = true;
 
             boolean jumpedOver = isRunning;
             //Character will first walk on an axis until along a diagonal with the destination...
