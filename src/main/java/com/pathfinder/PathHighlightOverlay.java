@@ -83,6 +83,12 @@ public class PathHighlightOverlay extends Overlay {
                 xDist = selectedPoint.getX() - currPoint.getX();
                 yDist = selectedPoint.getY() - currPoint.getY();
             }
+
+            if (!jumpedOver && config.skipJumpedTiles())
+            { // Last tile was jumped over, flag was flipped
+                LocalPoint pt = LocalPoint.fromWorld(client, currPoint.getX(), currPoint.getY());
+                renderTile(graphics, pt, config.highlightPathColor());
+            }
         }
         return null;
     }
