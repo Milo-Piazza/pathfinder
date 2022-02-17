@@ -5,7 +5,9 @@ import net.runelite.api.Perspective;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.*;
+import net.runelite.api.widgets.WidgetInfo;
 
 import javax.inject.Inject;
 import java.awt.*;
@@ -49,12 +51,24 @@ public class PathHighlightOverlay extends Overlay {
             {
                 dy = (int) Math.signum((float) yDist);
             }
+
+            boolean isRunning;
+            Widget runOrb = client.getWidget(WidgetInfo.MINIMAP_TOGGLE_RUN_ORB);
+
+            if (runOrb == null)
+                isRunning = true;
+            else
+                isRunning = runOrb.isFilled();
+
+            boolean jumpedOver = isRunning;
             //Character will first walk on an axis until along a diagonal with the destination...
             while (Math.abs(xDist) != Math.abs(yDist))
             {
                 currPoint = currPoint.dx(dx).dy(dy);
                 LocalPoint pt = LocalPoint.fromWorld(client, currPoint.getX(), currPoint.getY());
-                renderTile(graphics, pt, config.highlightPathColor());
+                if (!jumpedOver || !config.skipJumpedTiles())
+                    renderTile(graphics, pt, config.highlightPathColor());
+                jumpedOver ^= isRunning; // Flip only if running;
                 xDist = selectedPoint.getX() - currPoint.getX();
                 yDist = selectedPoint.getY() - currPoint.getY();
             }
@@ -65,7 +79,9 @@ public class PathHighlightOverlay extends Overlay {
             {
                 currPoint = currPoint.dx(dx).dy(dy);
                 LocalPoint pt = LocalPoint.fromWorld(client, currPoint.getX(), currPoint.getY());
-                renderTile(graphics, pt, config.highlightPathColor());
+                if (!config.skipJumpedTiles() || !jumpedOver)
+                    renderTile(graphics, pt, config.highlightPathColor());
+                jumpedOver ^= isRunning; // Flip only if running;
                 xDist = selectedPoint.getX() - currPoint.getX();
                 yDist = selectedPoint.getY() - currPoint.getY();
             }
